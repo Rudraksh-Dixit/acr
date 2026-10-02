@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useHealth, useStats } from '../../hooks/queries'
 import { getTheme, toggleTheme, type Theme } from '../../lib/theme'
@@ -19,6 +19,12 @@ export default function TopNav() {
   const stats = useStats()
   const location = useLocation()
   const [theme, setThemeState] = useState<Theme>(() => getTheme())
+
+  useEffect(() => {
+    const onTheme = () => setThemeState(getTheme())
+    window.addEventListener('acr:theme-changed', onTheme)
+    return () => window.removeEventListener('acr:theme-changed', onTheme)
+  }, [])
 
   const online = health.data?.status === 'ok'
   const down = health.isError
@@ -64,6 +70,15 @@ export default function TopNav() {
           >
             EVALUATE
           </NavLink>
+
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('acr:open-palette'))}
+            className="hidden rounded-sm border border-line px-2 py-1 text-[10px] font-medium tracking-[0.14em] text-fg-muted transition-colors hover:border-line-strong sm:block"
+            title="Command palette (Ctrl+K / Cmd+K)"
+            aria-label="Open command palette"
+          >
+            {'\u2318'}K
+          </button>
 
           <button
             onClick={() => setThemeState(toggleTheme())}

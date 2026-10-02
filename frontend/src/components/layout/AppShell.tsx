@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import CommandPalette from '../ui/CommandPalette'
 import TopNav from './TopNav'
 
 /** app chrome: fixed nav + routed content, landing excluded */
@@ -21,6 +22,7 @@ export default function AppShell() {
   return (
     <div className="min-h-dvh">
       <TopNav />
+      <CommandPalette />
       <main className="pt-12">
         <Outlet />
       </main>

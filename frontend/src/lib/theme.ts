@@ -23,5 +23,6 @@ export function applyTheme(theme: Theme): void {
 export function toggleTheme(): Theme {
   const next: Theme = getTheme() === 'dark' ? 'light' : 'dark'
   applyTheme(next)
+  window.dispatchEvent(new CustomEvent('acr:theme-changed', { detail: next }))
   return next
 }
