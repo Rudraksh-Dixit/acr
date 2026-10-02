@@ -140,3 +140,91 @@ textarea:focus-visible {
   outline: 1px solid rgb(255 255 255 / 0.55);
   outline-offset: 2px;
 }
+
+/* light theme -------------------------------------------------------------
+   Same token names, remapped for light surfaces. Tailwind utilities compile
+   to var(--color-*), so every color utility follows automatically; the
+   white-alpha utility overrides below flip to black-alpha for contrast. */
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --color-base: #f3f3f5;
+  --color-panel: #ffffff;
+  --color-raised: #ededf1;
+  --color-over: #e4e4ea;
+  --color-line: rgb(0 0 0 / 0.1);
+  --color-line-strong: rgb(0 0 0 / 0.24);
+
+  --color-fg: #16161a;
+  --color-fg-muted: #55555f;
+  --color-fg-faint: #7b7b86;
+
+  --color-risk: #c6282d;
+  --color-risk-deep: #f9dcdc;
+  --color-warm: #97680a;
+  --color-warm-deep: #f6ead0;
+  --color-confirmed: #2b7a3d;
+  --color-confirmed-deep: #d8eee0;
+  --color-inferred: #5b4bd6;
+  --color-inferred-deep: #e2ddf9;
+  --color-normal: #6a6a74;
+}
+
+[data-theme='light'] ::selection {
+  background: rgb(0 0 0 / 0.14);
+}
+
+[data-theme='light'] * {
+  scrollbar-color: rgb(0 0 0 / 0.18) transparent;
+}
+[data-theme='light'] *::-webkit-scrollbar-thumb {
+  background: rgb(0 0 0 / 0.18);
+}
+[data-theme='light'] *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* white-alpha utilities -> black-alpha on light surfaces */
+[data-theme='light'] .bg-white\/3 { background-color: rgb(0 0 0 / 0.03); }
+[data-theme='light'] .bg-white\/5 { background-color: rgb(0 0 0 / 0.05); }
+[data-theme='light'] .bg-white\/6 { background-color: rgb(0 0 0 / 0.06); }
+[data-theme='light'] .bg-white\/7 { background-color: rgb(0 0 0 / 0.07); }
+[data-theme='light'] .bg-white\/8 { background-color: rgb(0 0 0 / 0.08); }
+[data-theme='light'] .bg-white\/10 { background-color: rgb(0 0 0 / 0.1); }
+[data-theme='light'] .bg-white\/12 { background-color: rgb(0 0 0 / 0.12); }
+[data-theme='light'] .bg-white\/25 { background-color: rgb(0 0 0 / 0.25); }
+[data-theme='light'] .bg-white\/30 { background-color: rgb(0 0 0 / 0.3); }
+[data-theme='light'] .bg-white\/50 { background-color: rgb(0 0 0 / 0.45); }
+[data-theme='light'] .bg-white\/55 { background-color: rgb(0 0 0 / 0.5); }
+[data-theme='light'] .bg-white\/70 { background-color: rgb(0 0 0 / 0.65); }
+[data-theme='light'] .border-white\/60 { border-color: rgb(0 0 0 / 0.35); }
+[data-theme='light'] .hover\:bg-white\/3:hover { background-color: rgb(0 0 0 / 0.04); }
+[data-theme='light'] .hover\:bg-white\/4:hover { background-color: rgb(0 0 0 / 0.05); }
+[data-theme='light'] .hover\:bg-white\/6:hover { background-color: rgb(0 0 0 / 0.07); }
+[data-theme='light'] .hover\:bg-white\/8:hover { background-color: rgb(0 0 0 / 0.08); }
+[data-theme='light'] .hover\:bg-white\/10:hover { background-color: rgb(0 0 0 / 0.1); }
+[data-theme='light'] .hover\:bg-white\/12:hover { background-color: rgb(0 0 0 / 0.12); }
+[data-theme='light'] .hover\:border-white\/40:hover { border-color: rgb(0 0 0 / 0.3); }
+[data-theme='light'] .enabled\:hover\:bg-white\/4:enabled:hover { background-color: rgb(0 0 0 / 0.05); }
+[data-theme='light'] .enabled\:hover\:bg-white\/6:enabled:hover { background-color: rgb(0 0 0 / 0.07); }
+[data-theme='light'] .enabled\:hover\:bg-white\/8:enabled:hover { background-color: rgb(0 0 0 / 0.08); }
+
+/* graph + chips on light surfaces */
+[data-theme='light'] .entity-chip[data-selected='true'] {
+  border-color: rgb(0 0 0 / 0.7);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.25), 0 8px 28px rgb(0 0 0 / 0.18);
+}
+[data-theme='light'] .react-flow__edge-path {
+  stroke: rgb(0 0 0 / 0.3);
+}
+[data-theme='light'] .react-flow__edge[data-active='true'] .react-flow__edge-path {
+  stroke: rgb(0 0 0 / 0.72);
+}
+[data-theme='light'] button:focus-visible,
+[data-theme='light'] a:focus-visible,
+[data-theme='light'] input:focus-visible,
+[data-theme='light'] select:focus-visible,
+[data-theme='light'] textarea:focus-visible {
+  outline-color: rgb(0 0 0 / 0.6);
+}

@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useHealth, useStats } from '../../hooks/queries'
+import { getTheme, toggleTheme, type Theme } from '../../lib/theme'
 import { StatusDot, TechLabel } from '../ui/primitives'
 
 const NAV = [
@@ -15,6 +17,7 @@ export default function TopNav() {
   const health = useHealth()
   const stats = useStats()
   const location = useLocation()
+  const [theme, setThemeState] = useState<Theme>(() => getTheme())
 
   const online = health.data?.status === 'ok'
   const down = health.isError
@@ -60,6 +63,15 @@ export default function TopNav() {
           >
             EVALUATE
           </NavLink>
+
+          <button
+            onClick={() => setThemeState(toggleTheme())}
+            className="rounded-sm border border-line px-2 py-1 text-[10px] font-medium tracking-[0.14em] text-fg-muted transition-colors hover:border-line-strong"
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+          >
+            {theme === 'dark' ? 'LIGHT' : 'DARK'}
+          </button>
 
           {eventCount != null ? (
             <span className="hidden items-center gap-2 md:flex">
