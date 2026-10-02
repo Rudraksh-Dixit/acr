@@ -1790,6 +1790,184 @@
           }
         }
       }
+    },
+    "/api/datasets": {
+      "get": {
+        "tags": [
+          "datasets"
+        ],
+        "summary": "Dataset Catalog",
+        "operationId": "dataset_catalog_api_datasets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatasetCatalogOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasets/{dataset_id}/run": {
+      "post": {
+        "tags": [
+          "datasets"
+        ],
+        "summary": "Dataset Run",
+        "operationId": "dataset_run_api_datasets__dataset_id__run_post",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/DatasetRunRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatasetRunOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasets/runs": {
+      "get": {
+        "tags": [
+          "datasets"
+        ],
+        "summary": "Dataset Runs",
+        "operationId": "dataset_runs_api_datasets_runs_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatasetRunListOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/datasets/runs/{run_id}": {
+      "get": {
+        "tags": [
+          "datasets"
+        ],
+        "summary": "Dataset Run Detail",
+        "operationId": "dataset_run_detail_api_datasets_runs__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatasetRunDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2521,6 +2699,505 @@
           "name"
         ],
         "title": "CoverageTechnique"
+      },
+      "DatasetAdapterOut": {
+        "properties": {
+          "adapter": {
+            "type": "string",
+            "title": "Adapter",
+            "default": ""
+          },
+          "rows_read": {
+            "type": "integer",
+            "title": "Rows Read",
+            "default": 0
+          },
+          "issues": {
+            "items": {
+              "$ref": "#/components/schemas/IngestIssue"
+            },
+            "type": "array",
+            "title": "Issues"
+          }
+        },
+        "type": "object",
+        "title": "DatasetAdapterOut"
+      },
+      "DatasetCatalogItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "source_name": {
+            "type": "string",
+            "title": "Source Name"
+          },
+          "adapter": {
+            "type": "string",
+            "title": "Adapter"
+          },
+          "ground_truth": {
+            "type": "boolean",
+            "title": "Ground Truth"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available",
+            "default": true
+          },
+          "path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Path"
+          },
+          "fetch_hint": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fetch Hint"
+          },
+          "origin_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin Url"
+          },
+          "rows": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rows"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "label",
+          "source_name",
+          "adapter",
+          "ground_truth"
+        ],
+        "title": "DatasetCatalogItem"
+      },
+      "DatasetCatalogOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DatasetCatalogItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "DatasetCatalogOut"
+      },
+      "DatasetEvaluationOut": {
+        "properties": {
+          "ground_truth": {
+            "type": "boolean",
+            "title": "Ground Truth"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "metrics": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metrics"
+          },
+          "per_scenario": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Per Scenario"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ground_truth"
+        ],
+        "title": "DatasetEvaluationOut"
+      },
+      "DatasetRunDetail": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "ground_truth": {
+            "type": "boolean",
+            "title": "Ground Truth"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "counts": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Counts"
+          },
+          "evaluation": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Evaluation"
+          },
+          "events_processed": {
+            "type": "integer",
+            "title": "Events Processed",
+            "default": 0
+          },
+          "duration_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Seconds"
+          },
+          "config": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Config"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "dataset_id",
+          "label",
+          "kind",
+          "ground_truth",
+          "seed"
+        ],
+        "title": "DatasetRunDetail"
+      },
+      "DatasetRunHistoryItem": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "ground_truth": {
+            "type": "boolean",
+            "title": "Ground Truth"
+          },
+          "seed": {
+            "type": "integer",
+            "title": "Seed"
+          },
+          "counts": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Counts"
+          },
+          "evaluation": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Evaluation"
+          },
+          "events_processed": {
+            "type": "integer",
+            "title": "Events Processed",
+            "default": 0
+          },
+          "duration_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "created_at",
+          "dataset_id",
+          "label",
+          "kind",
+          "ground_truth",
+          "seed"
+        ],
+        "title": "DatasetRunHistoryItem"
+      },
+      "DatasetRunListOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DatasetRunHistoryItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "offset": {
+            "type": "integer",
+            "title": "Offset"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "DatasetRunListOut"
+      },
+      "DatasetRunOut": {
+        "properties": {
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "dataset": {
+            "$ref": "#/components/schemas/DatasetCatalogItem"
+          },
+          "adapter": {
+            "$ref": "#/components/schemas/DatasetAdapterOut"
+          },
+          "events_received": {
+            "type": "integer",
+            "title": "Events Received",
+            "default": 0
+          },
+          "events_stored": {
+            "type": "integer",
+            "title": "Events Stored",
+            "default": 0
+          },
+          "events_replaced": {
+            "type": "integer",
+            "title": "Events Replaced",
+            "default": 0
+          },
+          "events_skipped": {
+            "type": "integer",
+            "title": "Events Skipped",
+            "default": 0
+          },
+          "duplicates": {
+            "type": "integer",
+            "title": "Duplicates",
+            "default": 0
+          },
+          "ingest_issues": {
+            "items": {
+              "$ref": "#/components/schemas/IngestIssue"
+            },
+            "type": "array",
+            "title": "Ingest Issues"
+          },
+          "detections": {
+            "type": "integer",
+            "title": "Detections",
+            "default": 0
+          },
+          "chains": {
+            "type": "integer",
+            "title": "Chains",
+            "default": 0
+          },
+          "attack_chains": {
+            "type": "integer",
+            "title": "Attack Chains",
+            "default": 0
+          },
+          "reconstruction": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reconstruction"
+          },
+          "evaluation": {
+            "$ref": "#/components/schemas/DatasetEvaluationOut"
+          },
+          "duration_seconds": {
+            "type": "number",
+            "title": "Duration Seconds",
+            "default": 0.0
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset",
+          "adapter",
+          "evaluation"
+        ],
+        "title": "DatasetRunOut"
+      },
+      "DatasetRunRequest": {
+        "properties": {
+          "seed": {
+            "type": "integer",
+            "title": "Seed",
+            "default": 42
+          },
+          "ingest": {
+            "type": "boolean",
+            "title": "Ingest",
+            "default": true
+          },
+          "reconstruct": {
+            "type": "boolean",
+            "title": "Reconstruct",
+            "default": true
+          },
+          "replace_existing": {
+            "type": "boolean",
+            "title": "Replace Existing",
+            "default": true
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "DatasetRunRequest"
       },
       "DetectionOut": {
         "properties": {

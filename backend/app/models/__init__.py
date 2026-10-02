@@ -13,6 +13,7 @@ from app.models.chain import AttackChain, ChainEvent, AnalystFeedback  # noqa: E
 from app.models.evidence import Evidence  # noqa: E402,F401
 from app.models.technique import Technique  # noqa: E402,F401
 from app.models.scenario import Scenario, EvaluationRun  # noqa: E402,F401
+from app.models.dataset_run import DatasetRun  # noqa: E402,F401
 
 __all__ = [
     "Base",
@@ -28,4 +29,5 @@ __all__ = [
     "Technique",
     "Scenario",
     "EvaluationRun",
+    "DatasetRun",
 ]

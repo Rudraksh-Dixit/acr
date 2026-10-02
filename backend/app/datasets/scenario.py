@@ -44,7 +44,9 @@ def load(
     scenario_ids: list[str] = []
     for result in results:
         scenario_ids.append(result.scenario_id)
-        records.extend(result.events)
+        for event in result.events:
+            # per-record tag so a mixed batch can be ingested scenario-by-scenario
+            records.append({**event, "scenario_id": result.scenario_id})
 
     return AdapterResult(
         records=records,
