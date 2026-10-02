@@ -203,31 +203,41 @@ export default function Evaluate() {
         </div>
       </header>
 
-      {/* stage flow */}
-      <section className="mb-10 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-stretch gap-3">
-        {STAGES.map((stage, i) => (
-          <div key={stage.key} className="flex items-center gap-3">
-            <div className="flex-1 rounded-sm border border-line bg-panel px-5 py-5">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-semibold tracking-[0.18em] text-fg">{stage.label}</span>
-                <span className="text-[10px] text-fg-faint mono">{i + 1}/3</span>
-              </div>
-              <div className="mt-1 text-[11px] text-fg-faint">{stage.sub}</div>
-              <div className="mt-4 flex items-end gap-5">
-                <div>
-                  <div className="display text-4xl leading-none">{f1(asF1(data?.technique_level?.[stage.key]?.f1))}</div>
-                  <TechLabel className="mt-1.5 block !text-[9px]">Technique F1</TechLabel>
-                </div>
-                <div>
-                  <div className="display text-2xl leading-none text-fg-muted">{f1(asF1(data?.event_level?.[stage.key]?.f1))}</div>
-                  <TechLabel className="mt-1 block !text-[9px]">Event F1</TechLabel>
-                </div>
-              </div>
+      {stages.isLoading && !stages.data ? (
+        <section className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-stretch gap-3" aria-busy="true" aria-label="Loading evaluation">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="flex items-center gap-3">
+              <div className="h-40 flex-1 animate-pulse rounded-sm border border-line bg-panel" />
+              {i < 2 ? <div className="flex items-center px-1 text-fg-faint">{'\u2192'}</div> : null}
             </div>
-            {i < 2 ? <div className="flex items-center px-1 text-fg-faint">{'\u2192'}</div> : null}
-          </div>
-        ))}
-      </section>
+          ))}
+        </section>
+      ) : (
+        <section className="mb-10 grid grid-cols-[1fr_auto_1fr_auto_1fr] items-stretch gap-3">
+          {STAGES.map((stage, i) => (
+            <div key={stage.key} className="flex items-center gap-3">
+              <div className="flex-1 rounded-sm border border-line bg-panel px-5 py-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-semibold tracking-[0.18em] text-fg">{stage.label}</span>
+                  <span className="text-[10px] text-fg-faint mono">{i + 1}/3</span>
+                </div>
+                <div className="mt-1 text-[11px] text-fg-faint">{stage.sub}</div>
+                <div className="mt-4 flex items-end gap-5">
+                  <div>
+                    <div className="display text-4xl leading-none">{f1(asF1(data?.technique_level?.[stage.key]?.f1))}</div>
+                    <TechLabel className="mt-1.5 block !text-[9px]">Technique F1</TechLabel>
+                  </div>
+                  <div>
+                    <div className="display text-2xl leading-none text-fg-muted">{f1(asF1(data?.event_level?.[stage.key]?.f1))}</div>
+                    <TechLabel className="mt-1 block !text-[9px]">Event F1</TechLabel>
+                  </div>
+                </div>
+              </div>
+              {i < 2 ? <div className="flex items-center px-1 text-fg-faint">{'\u2192'}</div> : null}
+            </div>
+          ))}
+        </section>
+      )}
 
       {/* metric sets */}
       <section className="mb-10 overflow-hidden rounded-sm border border-line bg-panel px-5">

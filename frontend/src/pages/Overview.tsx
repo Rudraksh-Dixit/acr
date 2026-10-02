@@ -248,52 +248,72 @@ export default function Overview() {
         </div>
       </header>
 
-      <div className="space-y-6">
-        <StatTiles stats={stats.data} />
-        <PipelineStrip pipeline={pipeline.data} />
-        {killChain ? (
-          <KillChainBar
-            stages={killChain.stages}
-            tacticToStage={killChain.tactic_to_stage}
-            coverage={coverage.data}
-          />
-        ) : null}
-
-        <section className="grid gap-3 lg:grid-cols-3">
-          <EvaluationSnapshot stages={evaluation.data} />
-          <DataSnapshot catalog={datasets.data} runs={datasetRuns.data} />
-          <div className="rounded-sm border border-line bg-panel px-5 py-4">
-            <div className="mb-2 flex items-center justify-between">
-              <TechLabel>Highest-risk chains</TechLabel>
-              <Link to="/chains" className="text-[10px] tracking-[0.14em] text-fg-faint hover:text-fg-muted">
-                OPEN →
-              </Link>
-            </div>
-            {topChains.length ? (
-              <ul className="space-y-1.5">
-                {topChains.map((chain) => (
-                  <li key={chain.chain_id} className="flex items-center justify-between gap-3 text-[11px]">
-                    <Link
-                      to={`/investigate/${chain.chain_id}`}
-                      className="truncate text-fg-muted hover:text-fg"
-                    >
-                      <span className="text-fg mono">{chain.chain_id}</span>{' '}
-                      {chain.is_attack ? 'attack' : 'benign'} · {chain.event_count ?? '?'} ev
-                    </Link>
-                    <span className="shrink-0 text-fg-faint mono">
-                      {typeof chain.confidence?.score === 'number'
-                        ? `${chain.confidence.score.toFixed(1)}%`
-                        : '\u2014'}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-[11px] text-fg-faint mono">no chains yet</p>
-            )}
+      {stats.isLoading && !stats.data ? (
+        <div className="space-y-6" aria-busy="true" aria-label="Loading overview">
+          <div className="grid grid-cols-2 gap-px overflow-hidden rounded-sm border border-line bg-line md:grid-cols-5">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div key={i} className="h-24 animate-pulse bg-panel" />
+            ))}
           </div>
-        </section>
-      </div>
+          <div className="grid gap-3 md:grid-cols-3">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-24 animate-pulse rounded-sm border border-line bg-panel" />
+            ))}
+          </div>
+          <div className="grid gap-3 lg:grid-cols-3">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="h-44 animate-pulse rounded-sm border border-line bg-panel" />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <StatTiles stats={stats.data} />
+          <PipelineStrip pipeline={pipeline.data} />
+          {killChain ? (
+            <KillChainBar
+              stages={killChain.stages}
+              tacticToStage={killChain.tactic_to_stage}
+              coverage={coverage.data}
+            />
+          ) : null}
+
+          <section className="grid gap-3 lg:grid-cols-3">
+            <EvaluationSnapshot stages={evaluation.data} />
+            <DataSnapshot catalog={datasets.data} runs={datasetRuns.data} />
+            <div className="rounded-sm border border-line bg-panel px-5 py-4">
+              <div className="mb-2 flex items-center justify-between">
+                <TechLabel>Highest-risk chains</TechLabel>
+                <Link to="/chains" className="text-[10px] tracking-[0.14em] text-fg-faint hover:text-fg-muted">
+                  OPEN →
+                </Link>
+              </div>
+              {topChains.length ? (
+                <ul className="space-y-1.5">
+                  {topChains.map((chain) => (
+                    <li key={chain.chain_id} className="flex items-center justify-between gap-3 text-[11px]">
+                      <Link
+                        to={`/investigate/${chain.chain_id}`}
+                        className="truncate text-fg-muted hover:text-fg"
+                      >
+                        <span className="text-fg mono">{chain.chain_id}</span>{' '}
+                        {chain.is_attack ? 'attack' : 'benign'} · {chain.event_count ?? '?'} ev
+                      </Link>
+                      <span className="shrink-0 text-fg-faint mono">
+                        {typeof chain.confidence?.score === 'number'
+                          ? `${chain.confidence.score.toFixed(1)}%`
+                          : '\u2014'}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-[11px] text-fg-faint mono">no chains yet</p>
+              )}
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   )
 }
