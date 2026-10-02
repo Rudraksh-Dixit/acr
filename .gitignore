@@ -19,6 +19,8 @@ data/*.db-shm
 *.log
 # bundled dataset samples are data, not logs
 !data/datasets/**/*.log
+# upstream artifacts are reproducible: python scripts/fetch_datasets.py
+data/datasets/sources/
 
 # secrets / local env
 .env
