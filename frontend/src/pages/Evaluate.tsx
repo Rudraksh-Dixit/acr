@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { runEvaluation } from '../api/evaluation'
 import { ErrorState, TechLabel } from '../components/ui/primitives'
 import { useEvaluationRuns, useStageComparison } from '../hooks/queries'
+import { useToast } from '../lib/toast'
 
 type StageKey = 'raw_detection' | 'correlation' | 'reconstruction'
 
@@ -150,17 +151,23 @@ export default function Evaluate() {
   const stages = useStageComparison()
   const runs = useEvaluationRuns()
   const qc = useQueryClient()
+  const toast = useToast()
   const [notice, setNotice] = useState<string | null>(null)
 
   const run = useMutation({
     mutationFn: () => runEvaluation({ persist: true }),
     onSuccess: (result) => {
-      setNotice('RUN ' + String(result.run_id ?? '') + ' COMPLETE')
+      const id = 'RUN ' + String(result.run_id ?? '')
+      setNotice(id + ' COMPLETE')
+      toast.success(id + ' COMPLETE')
       void qc.invalidateQueries({ queryKey: ['stages'] })
       void qc.invalidateQueries({ queryKey: ['evaluation-runs'] })
       void qc.invalidateQueries({ queryKey: ['stats'] })
     },
-    onError: (error: Error) => setNotice('EVALUATION FAILED \u2014 ' + error.message),
+    onError: (error: Error) => {
+      setNotice('EVALUATION FAILED \u2014 ' + error.message)
+      toast.error('EVALUATION FAILED \u2014 ' + error.message)
+    },
   })
 
   if (stages.isError && !stages.data) {

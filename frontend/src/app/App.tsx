@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AppShell from '../components/layout/AppShell'
 import { BootSequence, hasBooted } from '../components/layout/BootSequence'
+import { ToastProvider } from '../components/ui/Toast'
 import Attack from '../pages/Attack'
 import Chains from '../pages/Chains'
 import Data from '../pages/Data'
@@ -30,28 +31,30 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AnimatePresence>
-          {booting ? <BootSequence onDone={() => setBooting(false)} /> : null}
-        </AnimatePresence>
+      <ToastProvider>
+        <BrowserRouter>
+          <AnimatePresence>
+            {booting ? <BootSequence onDone={() => setBooting(false)} /> : null}
+          </AnimatePresence>
 
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route element={<AppShell />}>
-            <Route path="/overview" element={<Overview />} />
-            <Route path="/investigate" element={<Investigate />} />
-            <Route path="/investigate/:chainId" element={<Investigate />} />
-            <Route path="/chains" element={<Chains />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/data" element={<Data />} />
-            <Route path="/attack" element={<Attack />} />
-            <Route path="/simulate" element={<Simulate />} />
-            <Route path="/evaluate" element={<Evaluate />} />
-            <Route path="/system" element={<SystemPage />} />
-            <Route path="*" element={<Navigate to="/investigate" replace />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route element={<AppShell />}>
+              <Route path="/overview" element={<Overview />} />
+              <Route path="/investigate" element={<Investigate />} />
+              <Route path="/investigate/:chainId" element={<Investigate />} />
+              <Route path="/chains" element={<Chains />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/data" element={<Data />} />
+              <Route path="/attack" element={<Attack />} />
+              <Route path="/simulate" element={<Simulate />} />
+              <Route path="/evaluate" element={<Evaluate />} />
+              <Route path="/system" element={<SystemPage />} />
+              <Route path="*" element={<Navigate to="/investigate" replace />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ToastProvider>
     </QueryClientProvider>
   )
 }

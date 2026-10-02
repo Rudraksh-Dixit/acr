@@ -5,6 +5,7 @@ import { generateScenarios, resetScenarios } from '../api/scenarios'
 import type { ScenarioCatalogItem, ScenarioGenerateOut } from '../api/types'
 import { EmptyState, ErrorState, TechLabel } from '../components/ui/primitives'
 import { useScenarios } from '../hooks/queries'
+import { useToast } from '../lib/toast'
 
 const PIPELINE_STAGES = [
   'INGESTING\u2026',
@@ -73,6 +74,7 @@ function ScenarioRow({
 export default function Simulate() {
   const navigate = useNavigate()
   const qc = useQueryClient()
+  const toast = useToast()
   const scenarios = useScenarios()
   const [selected, setSelected] = useState<string | null>(null)
   const [stage, setStage] = useState(-1)
@@ -102,6 +104,7 @@ export default function Simulate() {
       if (timerRef.current) window.clearInterval(timerRef.current)
       setStage(PIPELINE_STAGES.length)
       setResult(data)
+      toast.success(`SCENARIO COMPLETE \u2014 ${data.events_stored} events, ${data.detections} detections, ${data.chains} chains`)
       void qc.invalidateQueries({ queryKey: ['chains'] })
       void qc.invalidateQueries({ queryKey: ['events'] })
       void qc.invalidateQueries({ queryKey: ['stats'] })
@@ -112,6 +115,7 @@ export default function Simulate() {
       if (timerRef.current) window.clearInterval(timerRef.current)
       setStage(-1)
       setError(err.message)
+      toast.error('SCENARIO FAILED \u2014 ' + err.message)
     },
   })
 
@@ -119,9 +123,13 @@ export default function Simulate() {
     mutationFn: () => resetScenarios({ confirm: true, reconstruct: false }),
     onSuccess: () => {
       setConfirmReset(false)
+      toast.success('STORE RESET')
       void qc.invalidateQueries()
     },
-    onError: (err: Error) => setError(err.message),
+    onError: (err: Error) => {
+      setError(err.message)
+      toast.error('RESET FAILED \u2014 ' + err.message)
+    },
   })
 
   if (scenarios.isError) {

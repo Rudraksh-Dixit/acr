@@ -4,6 +4,7 @@ import { runDataset } from '../api/datasets'
 import type { DatasetCatalogItem, DatasetRunOut } from '../api/types'
 import { ErrorState, PanelHeading, StatCell, TechLabel } from '../components/ui/primitives'
 import { useDatasetRuns, useDatasets } from '../hooks/queries'
+import { useToast } from '../lib/toast'
 
 const NO_GT_NOTE = 'no ground truth, precision/recall not computed'
 
@@ -199,6 +200,7 @@ export default function Data() {
   const catalog = useDatasets()
   const runs = useDatasetRuns()
   const qc = useQueryClient()
+  const toast = useToast()
   const [notice, setNotice] = useState<string | null>(null)
   const [results, setResults] = useState<Record<string, DatasetRunOut>>({})
 
@@ -218,8 +220,15 @@ export default function Data() {
       void qc.invalidateQueries({ queryKey: ['chains'] })
       void qc.invalidateQueries({ queryKey: ['events'] })
       void qc.invalidateQueries({ queryKey: ['global-graph'] })
+      toast.success(
+        `${result.dataset.id}: ${result.events_stored} stored, ${result.detections} detections` +
+          (result.evaluation.ground_truth ? '' : ' \u00b7 no ground truth (metrics not computed)'),
+      )
     },
-    onError: (error: Error) => setNotice('DATASET RUN FAILED \u2014 ' + error.message),
+    onError: (error: Error) => {
+      setNotice('DATASET RUN FAILED \u2014 ' + error.message)
+      toast.error('DATASET RUN FAILED \u2014 ' + error.message)
+    },
   })
 
   if (catalog.isError && !catalog.data) {

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { postFeedback } from '../../api/chains'
 import type { ChainDetail, EvidenceBlock, FeedbackRequest } from '../../api/types'
 import { fmtDuration, pct, riskColor, severityColor } from '../../lib/format'
+import { useToast } from '../../lib/toast'
 import { ErrorState, Meter, RiskBadge, TechLabel } from '../ui/primitives'
 
 function Section({ title, children, right }: { title: string; children: React.ReactNode; right?: React.ReactNode }) {
@@ -26,15 +27,18 @@ const STATUS_TONE: Record<string, string> = {
 
 function FeedbackControls({ chain }: { chain: ChainDetail }) {
   const qc = useQueryClient()
+  const toast = useToast()
   const [comment, setComment] = useState('')
 
   const fb = useMutation({
     mutationFn: (body: FeedbackRequest) => postFeedback(chain.chain_id, body),
-    onSuccess: () => {
+    onSuccess: (_data, vars) => {
       void qc.invalidateQueries({ queryKey: ['chain', chain.chain_id] })
       void qc.invalidateQueries({ queryKey: ['chains'] })
       setComment('')
+      toast.success(`${chain.chain_id} \u2192 ${vars.status}`)
     },
+    onError: (err: Error) => toast.error(`FEEDBACK FAILED \u2014 ${err.message}`),
   })
 
   const apply = (status: string, withReason = false) => {

@@ -4,6 +4,7 @@ import { uploadEventFile } from '../api/events'
 import type { IngestReportOut } from '../api/types'
 import { ErrorState, StatusDot, TechLabel } from '../components/ui/primitives'
 import { useConfig, useHealth, usePipeline, useStats } from '../hooks/systemQueries'
+import { useToast } from '../lib/toast'
 
 function Card({ title, children, right }: { title: string; children: React.ReactNode; right?: React.ReactNode }) {
   return (
@@ -38,6 +39,7 @@ export default function SystemPage() {
   const config = useConfig()
   const pipeline = usePipeline()
   const qc = useQueryClient()
+  const toast = useToast()
   const fileRef = useRef<HTMLInputElement>(null)
   const [report, setReport] = useState<IngestReportOut | null>(null)
   const [stage, setStage] = useState(-1)
@@ -52,13 +54,17 @@ export default function SystemPage() {
     onSuccess: (data) => {
       setStage(3)
       setReport(data)
+      toast.success(`INGEST COMPLETE \u2014 ${data.stored} stored, ${data.detections} detections`)
       void qc.invalidateQueries({ queryKey: ['chains'] })
       void qc.invalidateQueries({ queryKey: ['events'] })
       void qc.invalidateQueries({ queryKey: ['stats'] })
       void qc.invalidateQueries({ queryKey: ['global-graph'] })
       void qc.invalidateQueries({ queryKey: ['pipeline'] })
     },
-    onError: () => setStage(-1),
+    onError: (err: Error) => {
+      setStage(-1)
+      toast.error('INGEST FAILED \u2014 ' + err.message)
+    },
   })
 
   if (health.isError && !health.data) {
