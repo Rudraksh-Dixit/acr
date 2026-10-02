@@ -170,6 +170,7 @@ export interface ConfigOut {
   max_events_per_ingest: number
   engine: string
   confidence_engine: string
+  kill_chain?: { stages: string[]; tactic_to_stage: Record<string, number> }
   risk_engine: string
   summary_provider: string
 }

@@ -5,6 +5,7 @@ import { getTheme, toggleTheme, type Theme } from '../../lib/theme'
 import { StatusDot, TechLabel } from '../ui/primitives'
 
 const NAV = [
+  { to: '/overview', label: 'OVERVIEW' },
   { to: '/investigate', label: 'INVESTIGATE' },
   { to: '/chains', label: 'CHAINS' },
   { to: '/events', label: 'EVENTS' },

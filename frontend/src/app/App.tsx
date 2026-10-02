@@ -11,6 +11,7 @@ import Evaluate from '../pages/Evaluate'
 import Events from '../pages/Events'
 import Investigate from '../pages/Investigate'
 import Landing from '../pages/Landing'
+import Overview from '../pages/Overview'
 import Simulate from '../pages/Simulate'
 import SystemPage from '../pages/System'
 
@@ -37,6 +38,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<AppShell />}>
+            <Route path="/overview" element={<Overview />} />
             <Route path="/investigate" element={<Investigate />} />
             <Route path="/investigate/:chainId" element={<Investigate />} />
             <Route path="/chains" element={<Chains />} />
