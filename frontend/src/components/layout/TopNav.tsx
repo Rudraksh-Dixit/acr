@@ -6,6 +6,7 @@ const NAV = [
   { to: '/investigate', label: 'INVESTIGATE' },
   { to: '/chains', label: 'CHAINS' },
   { to: '/events', label: 'EVENTS' },
+  { to: '/data', label: 'DATA' },
   { to: '/attack', label: 'ATT&CK' },
   { to: '/simulate', label: 'SIMULATE' },
 ]

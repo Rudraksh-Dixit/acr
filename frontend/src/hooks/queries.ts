@@ -16,6 +16,7 @@ import {
 import { getCoverage, listTactics, listTechniques } from '../api/mitre'
 import { listEvents, type EventQuery } from '../api/events'
 import { listEvaluationRuns, runEvaluation, getStageComparison } from '../api/evaluation'
+import { listDatasets, listDatasetRuns } from '../api/datasets'
 import { getScenarioCatalog } from '../api/scenarios'
 import { getHealth, getPipeline, getStats } from '../api/system'
 import type { ChainQuery } from '../api/chains'
@@ -176,4 +177,15 @@ export const evaluationMutations = {
   dismiss: dismissChain,
   feedback: postFeedback,
 }
+
+/* datasets ---------------------------------------------------------------- */
+
+export function useDatasets() {
+  return useQuery({ queryKey: ['datasets'], queryFn: listDatasets, staleTime: 30_000 })
+}
+
+export function useDatasetRuns() {
+  return useQuery({ queryKey: ['dataset-runs'], queryFn: () => listDatasetRuns(20), staleTime: 5_000 })
+}
+
 export type { AcrGraphOut, EvaluationRunRequest }

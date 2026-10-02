@@ -6,6 +6,7 @@ import AppShell from '../components/layout/AppShell'
 import { BootSequence, hasBooted } from '../components/layout/BootSequence'
 import Attack from '../pages/Attack'
 import Chains from '../pages/Chains'
+import Data from '../pages/Data'
 import Evaluate from '../pages/Evaluate'
 import Events from '../pages/Events'
 import Investigate from '../pages/Investigate'
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="/investigate/:chainId" element={<Investigate />} />
             <Route path="/chains" element={<Chains />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/data" element={<Data />} />
             <Route path="/attack" element={<Attack />} />
             <Route path="/simulate" element={<Simulate />} />
             <Route path="/evaluate" element={<Evaluate />} />

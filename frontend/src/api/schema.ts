@@ -567,6 +567,97 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ioc/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import Iocs
+         * @description Import a CSV / STIX / JSON indicator list and match it against events.
+         *
+         *     Unmappable rows are reported as structured issues instead of failing the
+         *     import. Re-importing identical (indicator, source) pairs is idempotent.
+         */
+        post: operations["import_iocs_api_ioc_import_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/datasets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dataset Catalog */
+        get: operations["dataset_catalog_api_datasets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/datasets/{dataset_id}/run": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dataset Run */
+        post: operations["dataset_run_api_datasets__dataset_id__run_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/datasets/runs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dataset Runs */
+        get: operations["dataset_runs_api_datasets_runs_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/datasets/runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dataset Run Detail */
+        get: operations["dataset_run_detail_api_datasets_runs__run_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -647,6 +738,12 @@ export interface components {
             tactics?: string[];
             /** Techniques */
             techniques?: components["schemas"]["TechniqueRef"][];
+            /** Kill Chain Stage */
+            kill_chain_stage?: number | null;
+            /** Kill Chain Stage Name */
+            kill_chain_stage_name?: string | null;
+            /** Kill Chain Stages */
+            kill_chain_stages?: number[];
             /** Hosts */
             hosts?: string[];
             /** Users */
@@ -719,6 +816,12 @@ export interface components {
             tactics?: string[];
             /** Techniques */
             techniques?: components["schemas"]["TechniqueRef"][];
+            /** Kill Chain Stage */
+            kill_chain_stage?: number | null;
+            /** Kill Chain Stage Name */
+            kill_chain_stage_name?: string | null;
+            /** Kill Chain Stages */
+            kill_chain_stages?: number[];
             /** Hosts */
             hosts?: string[];
             /** Users */
@@ -783,6 +886,241 @@ export interface components {
             technique_id: string;
             /** Name */
             name: string;
+        };
+        /** DatasetAdapterOut */
+        DatasetAdapterOut: {
+            /**
+             * Adapter
+             * @default
+             */
+            adapter: string;
+            /**
+             * Rows Read
+             * @default 0
+             */
+            rows_read: number;
+            /** Issues */
+            issues?: components["schemas"]["IngestIssue"][];
+        };
+        /** DatasetCatalogItem */
+        DatasetCatalogItem: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Kind */
+            kind: string;
+            /** Label */
+            label: string;
+            /** Source Name */
+            source_name: string;
+            /** Adapter */
+            adapter: string;
+            /** Ground Truth */
+            ground_truth: boolean;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /**
+             * Available
+             * @default true
+             */
+            available: boolean;
+            /** Path */
+            path?: string | null;
+            /** Fetch Hint */
+            fetch_hint?: string | null;
+            /** Origin Url */
+            origin_url?: string | null;
+            /** Rows */
+            rows?: number | null;
+        };
+        /** DatasetCatalogOut */
+        DatasetCatalogOut: {
+            /** Items */
+            items: components["schemas"]["DatasetCatalogItem"][];
+            /** Total */
+            total: number;
+        };
+        /** DatasetEvaluationOut */
+        DatasetEvaluationOut: {
+            /** Ground Truth */
+            ground_truth: boolean;
+            /** Note */
+            note?: string | null;
+            /** Metrics */
+            metrics?: {
+                [key: string]: unknown;
+            } | null;
+            /** Per Scenario */
+            per_scenario?: {
+                [key: string]: unknown;
+            }[] | null;
+        };
+        /** DatasetRunDetail */
+        DatasetRunDetail: {
+            /** Id */
+            id: number;
+            /** Created At */
+            created_at: string;
+            /** Dataset Id */
+            dataset_id: string;
+            /** Label */
+            label: string;
+            /** Kind */
+            kind: string;
+            /** Ground Truth */
+            ground_truth: boolean;
+            /** Seed */
+            seed: number;
+            /** Counts */
+            counts?: {
+                [key: string]: unknown;
+            };
+            /** Evaluation */
+            evaluation?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Events Processed
+             * @default 0
+             */
+            events_processed: number;
+            /** Duration Seconds */
+            duration_seconds?: number | null;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            };
+            /** Notes */
+            notes?: string | null;
+        };
+        /** DatasetRunHistoryItem */
+        DatasetRunHistoryItem: {
+            /** Id */
+            id: number;
+            /** Created At */
+            created_at: string;
+            /** Dataset Id */
+            dataset_id: string;
+            /** Label */
+            label: string;
+            /** Kind */
+            kind: string;
+            /** Ground Truth */
+            ground_truth: boolean;
+            /** Seed */
+            seed: number;
+            /** Counts */
+            counts?: {
+                [key: string]: unknown;
+            };
+            /** Evaluation */
+            evaluation?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Events Processed
+             * @default 0
+             */
+            events_processed: number;
+            /** Duration Seconds */
+            duration_seconds?: number | null;
+        };
+        /** DatasetRunListOut */
+        DatasetRunListOut: {
+            /** Items */
+            items: components["schemas"]["DatasetRunHistoryItem"][];
+            /** Total */
+            total: number;
+            /** Limit */
+            limit: number;
+            /** Offset */
+            offset: number;
+        };
+        /** DatasetRunOut */
+        DatasetRunOut: {
+            /** Run Id */
+            run_id?: number | null;
+            dataset: components["schemas"]["DatasetCatalogItem"];
+            adapter: components["schemas"]["DatasetAdapterOut"];
+            /**
+             * Events Received
+             * @default 0
+             */
+            events_received: number;
+            /**
+             * Events Stored
+             * @default 0
+             */
+            events_stored: number;
+            /**
+             * Events Replaced
+             * @default 0
+             */
+            events_replaced: number;
+            /**
+             * Events Skipped
+             * @default 0
+             */
+            events_skipped: number;
+            /**
+             * Duplicates
+             * @default 0
+             */
+            duplicates: number;
+            /** Ingest Issues */
+            ingest_issues?: components["schemas"]["IngestIssue"][];
+            /**
+             * Detections
+             * @default 0
+             */
+            detections: number;
+            /**
+             * Chains
+             * @default 0
+             */
+            chains: number;
+            /**
+             * Attack Chains
+             * @default 0
+             */
+            attack_chains: number;
+            /** Reconstruction */
+            reconstruction?: {
+                [key: string]: unknown;
+            } | null;
+            evaluation: components["schemas"]["DatasetEvaluationOut"];
+            /**
+             * Duration Seconds
+             * @default 0
+             */
+            duration_seconds: number;
+        };
+        /** DatasetRunRequest */
+        DatasetRunRequest: {
+            /**
+             * Seed
+             * @default 42
+             */
+            seed: number;
+            /**
+             * Ingest
+             * @default true
+             */
+            ingest: boolean;
+            /**
+             * Reconstruct
+             * @default true
+             */
+            reconstruct: boolean;
+            /**
+             * Replace Existing
+             * @default true
+             */
+            replace_existing: boolean;
         };
         /** DetectionOut */
         DetectionOut: {
@@ -1290,6 +1628,18 @@ export interface components {
              */
             replace_duplicates: boolean;
         };
+        /** InlineIndicator */
+        InlineIndicator: {
+            /**
+             * Type
+             * @description ip | domain | hash (inferred if omitted)
+             */
+            type?: string | null;
+            /** Value */
+            value: string;
+            /** Source */
+            source?: string | null;
+        };
         /** InvestigationOut */
         InvestigationOut: {
             /** Chain Id */
@@ -1303,6 +1653,103 @@ export interface components {
             summary: {
                 [key: string]: unknown;
             };
+        };
+        /** IocImportOut */
+        IocImportOut: {
+            /** Format */
+            format: string;
+            /** Source */
+            source: string;
+            /** Indicators Received */
+            indicators_received: number;
+            /** Indicators Parsed */
+            indicators_parsed: number;
+            /** Indicators Invalid */
+            indicators_invalid: number;
+            /** Issues */
+            issues?: {
+                [key: string]: unknown;
+            }[];
+            /** By Type */
+            by_type?: {
+                [key: string]: number;
+            };
+            /** Events Scanned */
+            events_scanned: number;
+            /** Matches Found */
+            matches_found: number;
+            /** Detections Created */
+            detections_created: number;
+            /** Evidence Created */
+            evidence_created: number;
+            /** Duplicates Skipped */
+            duplicates_skipped: number;
+            /** Matched By Type */
+            matched_by_type?: {
+                [key: string]: number;
+            };
+            /** Matches */
+            matches?: components["schemas"]["IocMatchOut"][];
+            /**
+             * Matches Truncated
+             * @default false
+             */
+            matches_truncated: boolean;
+            /** Duration Seconds */
+            duration_seconds: number;
+        } & {
+            [key: string]: unknown;
+        };
+        /**
+         * IocImportRequest
+         * @description Either raw indicator content (CSV / STIX / JSON) or inline indicators.
+         */
+        IocImportRequest: {
+            /**
+             * Content
+             * @description Raw CSV / STIX / JSON indicator text
+             */
+            content?: string | null;
+            /** Filename */
+            filename?: string | null;
+            /**
+             * Format
+             * @default auto
+             */
+            format: string;
+            /**
+             * Source
+             * @default ioc_upload
+             */
+            source: string;
+            /**
+             * Indicators
+             * @description Alternative to content: typed indicators directly
+             */
+            indicators?: components["schemas"]["InlineIndicator"][] | null;
+        };
+        /** IocMatchOut */
+        IocMatchOut: {
+            /** Event Id */
+            event_id?: string | null;
+            /** Field */
+            field: string;
+            /** Indicator Type */
+            indicator_type: string;
+            /** Indicator Value */
+            indicator_value: string;
+            /** Indicator Source */
+            indicator_source: string;
+            /** Observed Value */
+            observed_value?: string | null;
+            /** Host */
+            host?: string | null;
+            /** Scenario Id */
+            scenario_id?: string | null;
+            /** Detection Id */
+            detection_id?: number | null;
+        } & {
+            [key: string]: unknown;
         };
         /** MissingStep */
         MissingStep: {
@@ -1656,6 +2103,8 @@ export interface components {
              * @default false
              */
             is_subtechnique: boolean;
+            /** Kill Chain Stage */
+            kill_chain_stage?: number | null;
         };
         /** TechniqueRef */
         TechniqueRef: {
@@ -1676,6 +2125,8 @@ export interface components {
              * @default true
              */
             observed: boolean;
+            /** Kill Chain Stage */
+            kill_chain_stage?: number | null;
         };
         /** TimelineItem */
         TimelineItem: {
@@ -2795,6 +3246,157 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+        };
+    };
+    import_iocs_api_ioc_import_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["IocImportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IocImportOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dataset_catalog_api_datasets_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DatasetCatalogOut"];
+                };
+            };
+        };
+    };
+    dataset_run_api_datasets__dataset_id__run_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                dataset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["DatasetRunRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DatasetRunOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dataset_runs_api_datasets_runs_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DatasetRunListOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dataset_run_detail_api_datasets_runs__run_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                run_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DatasetRunDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
