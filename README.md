@@ -5,6 +5,26 @@ chains: ingest -> normalize -> detect -> correlate -> reconstruct -> score ->
 map to MITRE ATT&CK -> evaluate against synthetic ground truth. Everything is
 rule-based and explainable - no fake ML, no hardcoded chains, no mock data.
 
+## Screenshots
+
+Headless-Chrome captures of the React frontend (full set in
+[`docs/screenshots/`](docs/screenshots), walkthrough in
+[`docs/demo.md`](docs/demo.md)):
+
+| | |
+|---|---|
+| ![Overview (dark)](docs/screenshots/overview-dark.png) | ![Overview (light)](docs/screenshots/overview-light.png) |
+| **Overview** — live stats, pipeline provenance, kill-chain coverage | **Light theme** — same data, token-swapped |
+| ![Investigate](docs/screenshots/investigate.png) | ![Chains](docs/screenshots/chains.png) |
+| **Investigate** — attack graph, kill-chain bar, replay, analyst rail | **Chains** — list with per-chain kill-chain strips |
+| ![ATT&CK](docs/screenshots/attack.png) | ![Data](docs/screenshots/data.png) |
+| **ATT&CK** — KC chips per tactic, technique detail | **Data** — dataset catalog, provenance labels, runs |
+| ![Evaluate](docs/screenshots/evaluate.png) | ![Command palette](docs/screenshots/command-palette.png) |
+| **Evaluate** — 3-stage metrics vs ground truth | **Command palette** — Ctrl/Cmd+K |
+
+More: [landing](docs/screenshots/landing.png) ·
+[system](docs/screenshots/system.png)
+
 ## Pipeline
 
 ```

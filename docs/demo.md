@@ -89,6 +89,8 @@ DATA · ATT&CK · SIMULATE (+ EVALUATE, SYSTEM on the right).
 
 ## Screenshot instructions (for docs/README figures)
 
+Committed screenshots live in [`docs/screenshots/`](screenshots) and are
+embedded in the README (regenerate with the snippet below if the UI changes).
 Headless Chrome (present on this machine) — one script per shot:
 
 ```js
