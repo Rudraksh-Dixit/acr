@@ -16,6 +16,7 @@ class TechniqueOut(BaseModel):
     subtechnique_of: Optional[str] = None
     detection_hint: Optional[str] = None
     is_subtechnique: bool = False
+    kill_chain_stage: Optional[int] = None
 
 
 class TechniqueListOut(BaseModel):

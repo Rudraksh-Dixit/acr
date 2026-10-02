@@ -10,6 +10,7 @@ from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
 from app.core.config import Settings, settings as default_settings
+from app.core.killchain import covered_stages, furthest_stage, stage_for_tactic, stage_name
 from app.core.logging import get_logger, log_event
 from app.correlation.engine import get_engine
 from app.models import AnalystFeedback, AttackChain, ChainEvent, Detection, Evidence, Event
@@ -49,6 +50,39 @@ class ReconstructionReport:
 
 def iso(value: Optional[datetime]) -> Optional[str]:
     return (value.isoformat() + "Z") if isinstance(value, datetime) else None
+
+
+def _chain_tactics(chain: AttackChain) -> list[str]:
+    """Tactics of a chain, falling back to its technique records."""
+    if chain.tactics:
+        return list(chain.tactics)
+    return [
+        t.get("tactic") or ""
+        for t in (chain.techniques or [])
+        if isinstance(t, dict) and (t.get("tactic") or "")
+    ]
+
+
+def kill_chain_fields(chain: AttackChain) -> dict[str, Any]:
+    """Derived kill chain stage fields (never stored, always computed)."""
+    tactics = _chain_tactics(chain)
+    stage = furthest_stage(tactics)
+    return {
+        "kill_chain_stage": stage,
+        "kill_chain_stage_name": stage_name(stage),
+        "kill_chain_stages": covered_stages(tactics),
+    }
+
+
+def techniques_with_stage(techniques: Optional[list[Any]]) -> list[Any]:
+    """Attach the derived kill_chain_stage to each technique dict."""
+    enriched: list[Any] = []
+    for t in techniques or []:
+        if isinstance(t, dict):
+            enriched.append({**t, "kill_chain_stage": stage_for_tactic(t.get("tactic"))})
+        else:
+            enriched.append(t)
+    return enriched
 
 
 def reconstruct(session: Session, settings: Settings | None = None,
@@ -166,7 +200,8 @@ def chain_summary_dict(chain: AttackChain) -> dict[str, Any]:
         "confidence": {"score": chain.confidence_score, "reasons": chain.confidence_reasons or []},
         "risk": {"score": chain.risk_score, "level": chain.risk_level, "factors": chain.risk_factors or []},
         "tactics": chain.tactics or [],
-        "techniques": chain.techniques or [],
+        "techniques": techniques_with_stage(chain.techniques),
+        **kill_chain_fields(chain),
         "hosts": chain.hosts or [],
         "users": chain.users or [],
         "summary": chain.summary,
@@ -245,8 +280,9 @@ def get_chain_full(session: Session, chain_id: str) -> Optional[dict[str, Any]]:
         "events": events,
         "detections": detections,
         "entities": chain.entities or [],
-        "techniques": chain.techniques or [],
+        "techniques": techniques_with_stage(chain.techniques),
         "tactics": chain.tactics or [],
+        **kill_chain_fields(chain),
         "hosts": chain.hosts or [],
         "users": chain.users or [],
         "processes": chain.processes or [],

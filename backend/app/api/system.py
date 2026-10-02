@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.core.database import get_db
+from app.core.killchain import KILL_CHAIN_STAGES, TACTIC_TO_STAGE
 
 router = APIRouter(prefix="/api", tags=["system"])
 
@@ -51,4 +52,10 @@ def config_dump() -> dict:
         "confidence_engine": "additive_rule_based",
         "risk_engine": "additive_rule_based",
         "summary_provider": "rule_based",
+        # kill chain stage names + tactic mapping are derived server-side
+        # (backend/app/core/killchain.py) so the UI never re-implements them
+        "kill_chain": {
+            "stages": list(KILL_CHAIN_STAGES),
+            "tactic_to_stage": dict(TACTIC_TO_STAGE),
+        },
     }

@@ -29,6 +29,8 @@ class TechniqueMeta:
         return bool(self.subtechnique_of)
 
     def to_dict(self) -> dict[str, Any]:
+        from app.core.killchain import stage_for_tactic
+
         return {
             "technique_id": self.technique_id,
             "name": self.name,
@@ -37,6 +39,7 @@ class TechniqueMeta:
             "subtechnique_of": self.subtechnique_of,
             "detection_hint": self.detection_hint,
             "is_subtechnique": self.is_subtechnique,
+            "kill_chain_stage": stage_for_tactic(self.tactic),
         }
 
 

@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.killchain import stage_for_tactic
 from app.mitre import get_mapper
 from app.models import AttackChain, Technique
 from app.schemas.mitre import (
@@ -51,6 +52,7 @@ def list_techniques(
             "technique_id": r.technique_id, "name": r.name, "tactic": r.tactic,
             "description": r.description, "subtechnique_of": r.subtechnique_of,
             "detection_hint": r.detection_hint, "is_subtechnique": bool(r.is_subtechnique),
+            "kill_chain_stage": stage_for_tactic(r.tactic),
         }
         for r in rows
     ]
@@ -69,6 +71,7 @@ def get_technique(technique_id: str, db: Session = Depends(get_db)) -> dict:
         "technique_id": row.technique_id, "name": row.name, "tactic": row.tactic,
         "description": row.description, "subtechnique_of": row.subtechnique_of,
         "detection_hint": row.detection_hint, "is_subtechnique": bool(row.is_subtechnique),
+        "kill_chain_stage": stage_for_tactic(row.tactic),
     }
 
 

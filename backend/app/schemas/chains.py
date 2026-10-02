@@ -38,6 +38,7 @@ class TechniqueRef(BaseModel):
     name: str = ""
     tactic: str = ""
     observed: bool = True
+    kill_chain_stage: Optional[int] = None
 
 
 class EntityRefOut(BaseModel):
@@ -115,6 +116,9 @@ class ChainSummary(BaseModel):
     risk: RiskOut
     tactics: list[str] = Field(default_factory=list)
     techniques: list[TechniqueRef] = Field(default_factory=list)
+    kill_chain_stage: Optional[int] = None
+    kill_chain_stage_name: Optional[str] = None
+    kill_chain_stages: list[int] = Field(default_factory=list)
     hosts: list[str] = Field(default_factory=list)
     users: list[str] = Field(default_factory=list)
     summary: Optional[str] = None
