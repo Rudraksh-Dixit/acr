@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useChains } from '../hooks/queries'
 import ChainPath from '../components/chains/ChainPath'
+import { KillChainStrip } from '../components/killchain/KillChainStrip'
 import { EmptyState, ErrorState, RiskBadge, TechLabel } from '../components/ui/primitives'
 import { countOf, fmtDuration, pct, riskColor, shortChain } from '../lib/format'
 import type { ChainSummary } from '../api/types'
@@ -161,6 +162,10 @@ export default function Chains() {
                       <span>{chain.users?.length ?? 0} USERS</span>
                       <span>{countOf(chain.event_count)} EVENTS</span>
                       {chain.duration_seconds != null ? <span>{fmtDuration(chain.duration_seconds)}</span> : null}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] tracking-[0.14em] text-fg-faint">KILL CHAIN</span>
+                      <KillChainStrip covered={chain.kill_chain_stages} compact />
                     </div>
                   </div>
 

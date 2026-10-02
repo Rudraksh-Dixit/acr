@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { getTechnique } from '../api/mitre'
 import { useChains, useCoverage, useTactics, useTechniques } from '../hooks/queries'
+import { useKillChain, stageLabel } from '../lib/killchain'
 import { EmptyState, ErrorState, TechLabel } from '../components/ui/primitives'
 import type { TechniqueOut } from '../api/types'
 
@@ -21,6 +22,8 @@ export default function Attack() {
     }
     return map
   }, [coverage.data])
+
+  const { stages: kcStages, tacticToStage } = useKillChain()
 
   const byTactic = useMemo(() => {
     const map = new Map<string, TechniqueOut[]>()
@@ -93,7 +96,17 @@ export default function Attack() {
               return (
                 <section key={tactic} className="w-[260px] shrink-0 border-r border-line">
                   <div className="sticky top-0 z-10 border-b border-line bg-panel/95 px-4 py-3 backdrop-blur">
-                    <div className="text-[11px] font-semibold tracking-[0.14em] text-fg">{tactic}</div>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="text-[11px] font-semibold tracking-[0.14em] text-fg">{tactic}</div>
+                      {tacticToStage[tactic] != null ? (
+                        <span
+                          className="shrink-0 rounded-sm border border-line px-1.5 py-0.5 text-[9px] tracking-[0.08em] text-fg-faint"
+                          title={`Kill chain stage: ${stageLabel(kcStages, tacticToStage[tactic])}`}
+                        >
+                          KC{tacticToStage[tactic]}
+                        </span>
+                      ) : null}
+                    </div>
                     <TechLabel className="!text-[9px]">
                       {observed.size > 0 ? `${observed.size} observed` : 'not observed'}
                     </TechLabel>
@@ -175,6 +188,14 @@ export default function Attack() {
                     ? 'OBSERVED IN TELEMETRY'
                     : 'NOT OBSERVED'}
                 </span>
+                {detail.data?.kill_chain_stage != null ? (
+                  <span
+                    className="rounded-sm border border-line px-2 py-1 text-[10px] tracking-[0.12em] text-fg-muted"
+                    title="Kill chain stage this technique maps to"
+                  >
+                    {stageLabel(kcStages, detail.data.kill_chain_stage)}
+                  </span>
+                ) : null}
               </div>
 
               {detail.data?.description ? (

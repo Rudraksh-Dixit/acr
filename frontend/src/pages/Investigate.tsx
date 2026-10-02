@@ -8,6 +8,7 @@ import IntelPanel from '../components/investigation/IntelPanel'
 import NetworkView from '../components/investigation/NetworkView'
 import ProcessTreeView from '../components/investigation/ProcessTree'
 import Timeline from '../components/timeline/Timeline'
+import { KillChainStrip } from '../components/killchain/KillChainStrip'
 import { EmptyState, ErrorState, TechLabel } from '../components/ui/primitives'
 import {
   useChain,
@@ -212,6 +213,16 @@ export default function Investigate() {
             ) : null}
           </div>
         </header>
+
+        {/* kill chain coverage for the active chain */}
+        {chainId && chainQ.data ? (
+          <div className="flex items-center gap-3 border-b border-line px-4 py-1.5">
+            <span className="shrink-0 text-[9px] tracking-[0.14em] text-fg-faint">KILL CHAIN</span>
+            <div className="min-w-0 flex-1">
+              <KillChainStrip covered={chainQ.data.kill_chain_stages} />
+            </div>
+          </div>
+        ) : null}
 
         {/* stage */}
         <div className="relative min-h-0 flex-1">
