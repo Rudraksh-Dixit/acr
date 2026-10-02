@@ -17,6 +17,8 @@ data/*.db-journal
 data/*.db-wal
 data/*.db-shm
 *.log
+# bundled dataset samples are data, not logs
+!data/datasets/**/*.log
 
 # secrets / local env
 .env

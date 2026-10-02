@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "description": "ACR dataset catalog. Every entry carries a provenance label: 'synthetic' for generated data, 'real (source name)' for externally sourced data. Paths are project-root relative.",
+  "datasets": [
+    {
+      "id": "synthetic-scenarios",
+      "name": "ACR synthetic scenarios (4 attack + 2 benign)",
+      "kind": "synthetic",
+      "label": "synthetic",
+      "source_name": "ACR built-in scenario generators",
+      "adapter": "scenario",
+      "ground_truth": true,
+      "path": null,
+      "scenario_ids": ["CRED-001", "PHISH-001", "LAT-001", "PERS-001", "PS-BENIGN-001", "BENIGN-OFFICE-001"],
+      "description": "Six deterministic scenarios with per-event ground-truth tags (gt_id), so precision/recall/F1 are computable. Regenerated in memory on each run (seed 42)."
+    },
+    {
+      "id": "otrf-security-datasets-lsass",
+      "name": "OTRF Security Datasets (Mordor) - LSASS dump syscalls",
+      "kind": "real",
+      "label": "real (OTRF Security Datasets)",
+      "source_name": "OTRF Security Datasets (Mordor)",
+      "adapter": "otrf_json",
+      "ground_truth": false,
+      "path": "data/datasets/real/otrf_security_datasets_lsass_dump.json",
+      "origin": {
+        "url": "https://raw.githubusercontent.com/OTRF/Security-Datasets/master/datasets/atomic/windows/credential_access/host/cmd_lsass_memory_dumpert_syscalls.zip",
+        "artifact": "data/datasets/sources/cmd_lsass_memory_dumpert_syscalls.zip",
+        "sha256": "a28dbf708685a80edfb0b3d2a00c9bf196dd394fc1d61a933878841f4872a7ed",
+        "rows": 118
+      },
+      "description": "Windows event telemetry captured during a credential-dumping technique (LSASS memory dump via syscalls). JSONL inside the upstream zip, bundled as a JSON array. No ground truth: precision/recall are not computed for this dataset."
+    },
+    {
+      "id": "evtx-attack-samples",
+      "name": "EVTX-ATTACK-SAMPLES (converted to JSON)",
+      "kind": "real",
+      "label": "real (EVTX-ATTACK-SAMPLES)",
+      "source_name": "EVTX-ATTACK-SAMPLES",
+      "adapter": "evtx_csv_json",
+      "ground_truth": false,
+      "path": "data/datasets/real/evtx_attack_samples.json",
+      "origin": {
+        "url": "https://raw.githubusercontent.com/sbousseaden/EVTX-ATTACK-SAMPLES/master/evtx_data.csv",
+        "artifact": "data/datasets/sources/evtx_data.csv",
+        "sha256": "9220b0725221244a6b61dff8dabbf382831c0fcc2ad9d261ae60cb1f2b082fff",
+        "rows_sampled": 400,
+        "rows_upstream": 4633
+      },
+      "description": "400-row slice (46 distinct source EVTX files) of the repository's converted EVTX CSV, limited to event ids ACR can normalize. Rows ACR cannot map are reported as skipped with reasons instead of being dropped silently. No ground truth: precision/recall are not computed for this dataset."
+    },
+    {
+      "id": "splunk-attack-data-windows-security",
+      "name": "Splunk attack_data - Windows Security log sample",
+      "kind": "real",
+      "label": "real (Splunk attack_data)",
+      "source_name": "Splunk attack_data",
+      "adapter": "splunk_log",
+      "ground_truth": false,
+      "path": "data/datasets/real/splunk_attack_data_windows_security.log",
+      "origin": {
+        "url": "https://media.githubusercontent.com/media/splunk/attack_data/master/datasets/attack_techniques/T1003.001/atomic_red_team/windows-security.log",
+        "artifact": "data/datasets/sources/splunk_windows-security.log",
+        "sha256": "962debff1935335a6c6396a19d778127af1316b964226ba4427fae4fb9c9361b",
+        "note": "upstream stores this file in Git LFS; raw.githubusercontent returns the pointer, media.githubusercontent returns the content",
+        "rows": "auto"
+      },
+      "description": "wevtutil-format Windows Security events from the atomic_red_team T1003.001 attack range (process creation with credential-dumping command lines). No ground truth: precision/recall are not computed for this dataset."
+    }
+  ]
+}
