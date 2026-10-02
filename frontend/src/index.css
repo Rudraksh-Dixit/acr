@@ -1,0 +1,142 @@
+@import 'tailwindcss';
+
+@theme {
+  /* environment */
+  --color-base: #09090b;
+  --color-panel: #0f0f13;
+  --color-raised: #17171d;
+  --color-over: #1e1e26;
+  --color-line: rgb(255 255 255 / 0.075);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+
+  /* type */
+  --color-fg: #e9e9ec;
+  --color-fg-muted: #97979f;
+  --color-fg-faint: #5e5e67;
+
+  /* semantic — used sparingly */
+  --color-risk: #e5484d;
+  --color-risk-deep: #4a1519;
+  --color-warm: #d9a441;
+  --color-warm-deep: #3d2f14;
+  --color-confirmed: #46a758;
+  --color-confirmed-deep: #14321c;
+  --color-inferred: #9d8cff;
+  --color-inferred-deep: #26204a;
+  --color-normal: #9a9aa2;
+
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Mono', monospace;
+}
+
+html {
+  background: var(--color-base);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--color-base);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(255 255 255 / 0.18);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.14) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgb(255 255 255 / 0.14);
+  border-radius: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* recurring text patterns ------------------------------------------------ */
+
+.tech-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-fg-faint);
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-feature-settings: 'calt' 0;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+/* graph node chips -------------------------------------------------------- */
+
+.entity-chip {
+  background: var(--color-raised);
+  border: 1px solid var(--color-line-strong);
+  border-radius: 6px;
+  transition:
+    opacity 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease;
+}
+
+.entity-chip[data-selected='true'] {
+  border-color: rgb(255 255 255 / 0.7);
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.25), 0 8px 28px rgb(0 0 0 / 0.5);
+}
+
+.dimmed {
+  opacity: 0.16;
+}
+
+/* react flow overrides ---------------------------------------------------- */
+
+.react-flow__attribution {
+  display: none;
+}
+
+.react-flow__edge-path {
+  stroke: rgb(255 255 255 / 0.22);
+}
+
+.react-flow__edge.dimmed .react-flow__edge-path {
+  opacity: 0.08;
+}
+
+.react-flow__edge[data-active='true'] .react-flow__edge-path {
+  stroke: rgb(255 255 255 / 0.75);
+}
+
+.react-flow__handle {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* focus rings ------------------------------------------------------------- */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 1px solid rgb(255 255 255 / 0.55);
+  outline-offset: 2px;
+}
