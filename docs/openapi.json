@@ -1748,6 +1748,48 @@
           }
         }
       }
+    },
+    "/api/ioc/import": {
+      "post": {
+        "tags": [
+          "ioc"
+        ],
+        "summary": "Import Iocs",
+        "description": "Import a CSV / STIX / JSON indicator list and match it against events.\n\nUnmappable rows are reported as structured issues instead of failing the\nimport. Re-importing identical (indicator, source) pairs is idempotent.",
+        "operationId": "import_iocs_api_ioc_import_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IocImportRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IocImportOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1971,6 +2013,35 @@
             },
             "type": "array",
             "title": "Techniques"
+          },
+          "kill_chain_stage": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kill Chain Stage"
+          },
+          "kill_chain_stage_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kill Chain Stage Name"
+          },
+          "kill_chain_stages": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Kill Chain Stages"
           },
           "hosts": {
             "items": {
@@ -2206,6 +2277,35 @@
             },
             "type": "array",
             "title": "Techniques"
+          },
+          "kill_chain_stage": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kill Chain Stage"
+          },
+          "kill_chain_stage_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kill Chain Stage Name"
+          },
+          "kill_chain_stages": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Kill Chain Stages"
           },
           "hosts": {
             "items": {
@@ -3984,6 +4084,45 @@
         "type": "object",
         "title": "IngestRequest"
       },
+      "InlineIndicator": {
+        "properties": {
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type",
+            "description": "ip | domain | hash (inferred if omitted)"
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 512,
+            "title": "Value"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "title": "InlineIndicator"
+      },
       "InvestigationOut": {
         "properties": {
           "chain_id": {
@@ -4028,6 +4167,247 @@
           "summary"
         ],
         "title": "InvestigationOut"
+      },
+      "IocImportOut": {
+        "properties": {
+          "format": {
+            "type": "string",
+            "title": "Format"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "indicators_received": {
+            "type": "integer",
+            "title": "Indicators Received"
+          },
+          "indicators_parsed": {
+            "type": "integer",
+            "title": "Indicators Parsed"
+          },
+          "indicators_invalid": {
+            "type": "integer",
+            "title": "Indicators Invalid"
+          },
+          "issues": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Issues"
+          },
+          "by_type": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "By Type"
+          },
+          "events_scanned": {
+            "type": "integer",
+            "title": "Events Scanned"
+          },
+          "matches_found": {
+            "type": "integer",
+            "title": "Matches Found"
+          },
+          "detections_created": {
+            "type": "integer",
+            "title": "Detections Created"
+          },
+          "evidence_created": {
+            "type": "integer",
+            "title": "Evidence Created"
+          },
+          "duplicates_skipped": {
+            "type": "integer",
+            "title": "Duplicates Skipped"
+          },
+          "matched_by_type": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Matched By Type"
+          },
+          "matches": {
+            "items": {
+              "$ref": "#/components/schemas/IocMatchOut"
+            },
+            "type": "array",
+            "title": "Matches"
+          },
+          "matches_truncated": {
+            "type": "boolean",
+            "title": "Matches Truncated",
+            "default": false
+          },
+          "duration_seconds": {
+            "type": "number",
+            "title": "Duration Seconds"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "format",
+          "source",
+          "indicators_received",
+          "indicators_parsed",
+          "indicators_invalid",
+          "events_scanned",
+          "matches_found",
+          "detections_created",
+          "evidence_created",
+          "duplicates_skipped",
+          "duration_seconds"
+        ],
+        "title": "IocImportOut"
+      },
+      "IocImportRequest": {
+        "properties": {
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content",
+            "description": "Raw CSV / STIX / JSON indicator text"
+          },
+          "filename": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filename"
+          },
+          "format": {
+            "type": "string",
+            "pattern": "^(auto|csv|stix|json)$",
+            "title": "Format",
+            "default": "auto"
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 120,
+            "title": "Source",
+            "default": "ioc_upload"
+          },
+          "indicators": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/InlineIndicator"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Indicators",
+            "description": "Alternative to content: typed indicators directly"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "IocImportRequest",
+        "description": "Either raw indicator content (CSV / STIX / JSON) or inline indicators."
+      },
+      "IocMatchOut": {
+        "properties": {
+          "event_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Event Id"
+          },
+          "field": {
+            "type": "string",
+            "title": "Field"
+          },
+          "indicator_type": {
+            "type": "string",
+            "title": "Indicator Type"
+          },
+          "indicator_value": {
+            "type": "string",
+            "title": "Indicator Value"
+          },
+          "indicator_source": {
+            "type": "string",
+            "title": "Indicator Source"
+          },
+          "observed_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Observed Value"
+          },
+          "host": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Host"
+          },
+          "scenario_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scenario Id"
+          },
+          "detection_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detection Id"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "field",
+          "indicator_type",
+          "indicator_value",
+          "indicator_source"
+        ],
+        "title": "IocMatchOut"
       },
       "MissingStep": {
         "properties": {
@@ -4739,6 +5119,17 @@
             "type": "boolean",
             "title": "Is Subtechnique",
             "default": false
+          },
+          "kill_chain_stage": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kill Chain Stage"
           }
         },
         "type": "object",
@@ -4769,6 +5160,17 @@
             "type": "boolean",
             "title": "Observed",
             "default": true
+          },
+          "kill_chain_stage": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kill Chain Stage"
           }
         },
         "type": "object",
